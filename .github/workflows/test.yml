@@ -1,0 +1,37 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright's Chromium
+        run: |
+          npm install --no-audit --no-fund playwright@1.49.1
+          npx playwright install --with-deps chromium
+
+      - name: Unit tests — policy engine and grant codes
+        run: TZ=Asia/Jerusalem node --test test/engine.test.mjs test/crypto.test.mjs
+
+      - name: Smoke test — the extension in a real browser
+        run: TZ=Asia/Jerusalem node test/smoke.mjs
+
+      - name: Resolve the Chromium binary for the policy test
+        id: chrome
+        run: echo "path=$(node -e "console.log(require('playwright').chromium.executablePath())")" >> "$GITHUB_OUTPUT"
+
+      # Needs root to write /etc/chromium/policies/managed, which is the whole
+      # point — it proves the force-install path, not just that the code runs.
+      - name: Force-install test — policy, update.xml and CRX signature
+        run: sudo TK_CHROME="${{ steps.chrome.outputs.path }}" $(which node) test/forceinstall.mjs

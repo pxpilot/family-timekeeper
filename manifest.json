@@ -1,0 +1,80 @@
+{
+  "manifest_version": 3,
+  "name": "Family Timekeeper",
+  "short_name": "Timekeeper",
+  "version": "1.0.0",
+  "description": "Daily time budgets, allowed hours and session breaks for YouTube, TikTok and Instagram \u2014 including embeds on other sites.",
+  "minimum_chrome_version": "116",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqJk1NxwD4J4a42uJXRjIyL8x3el8puV2CqE8odzD0XvLPqRvWqldmHEamm67hI4ClE9RFAHVi/1mCvPYg3AR8Fde7h0BEjE1CXd2OWNOx0h6XX9a4NoOQPEgVygHME8RM7cH8TbqiaHJhDwa8fiHQvBWrD5V39VGsPZasI4QBDWmhjwB23+THJhdZGKPnXA/x1R5/kS5G4qnGHxbMDSJEnMajQ8pZqTZyFyM4TRb+yLGrmQObJHY9iHYskdeKKP55XE/glf4ZCGUdvxga6QUreTmLbMFqcpI0rkxnB/AQgVFt5UIfYtKv1LQq8owV/mGfYAP/xV+GHF1DLN6Brsr5wIDAQAB",
+  "permissions": [
+    "storage",
+    "alarms",
+    "tabs",
+    "idle",
+    "declarativeNetRequest"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "src/popup/popup.html",
+    "default_title": "Family Timekeeper"
+  },
+  "options_page": "src/options/options.html",
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.youtube.com/*",
+        "*://*.youtu.be/*",
+        "*://*.youtube-nocookie.com/*",
+        "*://*.tiktok.com/*",
+        "*://*.instagram.com/*"
+      ],
+      "js": [
+        "src/content/tracker.js"
+      ],
+      "css": [
+        "src/content/tracker.css"
+      ],
+      "run_at": "document_idle",
+      "all_frames": false
+    },
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "exclude_matches": [
+        "*://*.youtube.com/*",
+        "*://*.tiktok.com/*",
+        "*://*.instagram.com/*"
+      ],
+      "js": [
+        "src/content/embeds.js"
+      ],
+      "css": [
+        "src/content/embeds.css"
+      ],
+      "run_at": "document_start",
+      "all_frames": false
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "src/blocked/blocked.html"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ],
+  "icons": {
+    "16": "src/icons/icon16.png",
+    "48": "src/icons/icon48.png",
+    "128": "src/icons/icon128.png"
+  }
+}

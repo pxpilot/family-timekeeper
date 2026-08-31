@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Paused</title>
+  <link rel="stylesheet" href="blocked.css">
+</head>
+<body>
+  <main class="card">
+    <div class="glyph" id="glyph">⏸</div>
+    <h1 id="headline">Paused</h1>
+    <p class="reason" id="reason"></p>
+
+    <dl class="meta" id="meta"></dl>
+
+    <section class="ask" id="ask" hidden>
+      <button class="link" id="askBtn" type="button">Ask for more time</button>
+
+      <div class="askPanel" id="askPanel" hidden>
+        <p class="askHint">Read this code to your dad. He'll give you a number back.</p>
+        <div class="challenge" id="challenge">······</div>
+        <div class="row">
+          <label for="minutes">Minutes</label>
+          <select id="minutes"></select>
+        </div>
+        <div class="row">
+          <label for="code">His number</label>
+          <input id="code" inputmode="numeric" autocomplete="off" maxlength="6" placeholder="000000">
+        </div>
+        <button class="primary" id="redeem" type="button">Unlock</button>
+        <p class="err" id="err" hidden></p>
+      </div>
+    </section>
+
+    <section class="others" id="others"></section>
+  </main>
+  <script type="module" src="blocked.js"></script>
+</body>
+</html>

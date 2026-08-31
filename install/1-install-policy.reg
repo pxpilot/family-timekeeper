@@ -1,0 +1,67 @@
+Windows Registry Editor Version 5.00
+
+; ===========================================================================
+;  Family Timekeeper — Chrome policy for your son's Windows account
+;
+;  Extension ID: mfapfgenhahkmhgnflaggaehogaepgad
+;
+;  BEFORE YOU RUN THIS:
+;    1. Replace  https://REPLACE-ME.example/timekeeper/update.xml
+;       with the real URL where you host update.xml (see INSTALL.md).
+;    2. Right-click the file -> Merge, and approve the admin prompt.
+;    3. Fully quit and reopen Chrome, then check chrome://policy.
+;
+;  Everything here lives under HKEY_LOCAL_MACHINE, so it applies to every
+;  Windows account on the machine — including yours. If you want it to apply
+;  only to him, see the "per-user" note at the bottom of INSTALL.md.
+; ===========================================================================
+
+
+; --- Force-install Timekeeper, and block every other extension -------------
+; "*" = blocked means he cannot add anything else (including a VPN or a
+; "unblocker" extension). If he has extensions he legitimately needs, add an
+; allow entry for each one, the same shape as the block below.
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome\ExtensionSettings\*]
+"installation_mode"="blocked"
+"blocked_install_message"="Ask Dad if you need an extension installed."
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome\ExtensionSettings\mfapfgenhahkmhgnflaggaehogaepgad]
+"installation_mode"="force_installed"
+"update_url"="https://REPLACE-ME.example/timekeeper/update.xml"
+"toolbar_pin"="force_pinned"
+
+; Example: allow an extension he already uses (replace the ID).
+; [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome\ExtensionSettings\aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]
+; "installation_mode"="allowed"
+
+
+; --- Close the obvious ways around it --------------------------------------
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome]
+; Incognito windows do not run extensions. Turn incognito off entirely.
+"IncognitoModeAvailability"=dword:00000001
+; No guest profile, and no adding a second profile that skips the policy.
+"BrowserGuestModeEnabled"=dword:00000000
+"BrowserAddPersonEnabled"=dword:00000000
+; Ignore .crx files dropped in by other installers.
+"BlockExternalExtensions"=dword:00000001
+; Keep sync from carrying settings in from another machine.
+"SyncDisabled"=dword:00000001
+
+; OPTIONAL — DevTools can be used to poke at page scripts. Uncomment the next
+; line to switch DevTools off. Leave it commented if he is learning to code;
+; DevTools cannot remove a force-installed extension on its own.
+; "DeveloperToolsAvailability"=dword:00000002
+
+
+; --- Keep him out of the pages that manage extensions ----------------------
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome\URLBlocklist]
+"1"="chrome://extensions"
+"2"="chrome://extensions-internals"
+"3"="chrome://policy"
+"4"="chrome://flags"
+"5"="chrome://net-internals"
+"6"="chrome://settings/people"
+"7"="javascript://*"

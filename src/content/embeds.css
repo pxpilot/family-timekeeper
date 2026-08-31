@@ -1,0 +1,22 @@
+.tk-embed-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 160px;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px dashed rgba(120, 120, 130, .45);
+  border-radius: 12px;
+  background: repeating-linear-gradient(
+    135deg, rgba(140, 140, 150, .06) 0 10px, rgba(140, 140, 150, .11) 10px 20px);
+  font: 500 13px/1.5 -apple-system, "Segoe UI", system-ui, sans-serif;
+  color: #475467;
+}
+.tk-embed-inner { text-align: center; padding: 18px; }
+.tk-embed-title { font-weight: 650; font-size: 14px; color: #344054; }
+.tk-embed-sub { margin-top: 4px; opacity: .75; }
+
+@media (prefers-color-scheme: dark) {
+  .tk-embed-block { color: #98a2b3; border-color: rgba(160, 160, 175, .35); }
+  .tk-embed-title { color: #d0d5dd; }
+}

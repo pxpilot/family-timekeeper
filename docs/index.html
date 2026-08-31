@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Family Timekeeper — update endpoint</title>
+<style>
+  :root { color-scheme: light dark; --bg:#f1f4f3; --fg:#131a1c; --mut:#6d7a76; --line:#d5dcda; --acc:#0d6560; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#0e1416; --fg:#e4eae8; --mut:#7d8b87; --line:#26302f; --acc:#5bbdb4; }
+  }
+  body { margin:0; min-height:100vh; display:grid; place-items:center; padding:40px 20px;
+         background:var(--bg); color:var(--fg);
+         font:16px/1.6 ui-serif, Georgia, "Times New Roman", serif; }
+  main { max-width:52ch; }
+  h1 { font-family: ui-sans-serif, system-ui, sans-serif; font-size:22px; letter-spacing:-.02em; margin:0 0 10px; }
+  p { color:var(--mut); margin:0 0 18px; }
+  ul { list-style:none; padding:0; margin:0; border-top:1px solid var(--line); }
+  li { border-bottom:1px solid var(--line); padding:12px 0; }
+  a { color:var(--acc); font-family: ui-monospace, Menlo, Consolas, monospace; font-size:14px; }
+  small { display:block; color:var(--mut); font-size:13px; margin-top:3px; font-family: ui-sans-serif, system-ui, sans-serif; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Family Timekeeper</h1>
+  <p>Chrome extension update endpoint. Nothing to see here — this directory exists so Chrome can fetch the manifest and the package during a policy-driven install.</p>
+  <ul>
+    <li><a href="update.xml">update.xml</a><small>Points Chrome at the current version</small></li>
+    <li><a href="timekeeper.crx">timekeeper.crx</a><small>The signed package</small></li>
+    <li><a href="timekeeper.zip">timekeeper.zip</a><small>Unsigned, for a Chrome Web Store upload</small></li>
+  </ul>
+</main>
+</body>
+</html>

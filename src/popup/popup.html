@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Timekeeper</title>
+  <style>
+    :root { color-scheme: light dark; --ink:#101828; --muted:#667085; --line:#e4e7ec; --bg:#fff;
+            --ok:#067647; --warn:#b54708; --bad:#b42318; }
+    @media (prefers-color-scheme: dark) {
+      :root { --ink:#e6e9ef; --muted:#8d97a8; --line:#262c37; --bg:#161b23; --ok:#47c98a; --warn:#f0a259; --bad:#f07268; }
+    }
+    body { width: 264px; margin: 0; padding: 14px 16px 12px; background: var(--bg); color: var(--ink);
+           font: 14px/1.5 -apple-system,"Segoe UI",system-ui,sans-serif; }
+    h1 { font-size: 12px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin: 0 0 10px; }
+    .r { display:flex; justify-content:space-between; align-items:baseline; padding:7px 0; border-bottom:1px solid var(--line); }
+    .r:last-of-type { border-bottom: 0; }
+    b { font-variant-numeric: tabular-nums; font-weight: 600; }
+    .ok b { color: var(--ok); } .warn b { color: var(--warn); } .bad b { color: var(--bad); }
+    .sub { font-size: 11.5px; color: var(--muted); }
+    a { display:inline-block; margin-top:10px; font-size:12.5px; color:var(--muted); }
+  </style>
+</head>
+<body>
+  <h1>Time left today</h1>
+  <div id="list"></div>
+  <a href="#" id="opts">Parent settings</a>
+  <script type="module" src="popup.js"></script>
+</body>
+</html>

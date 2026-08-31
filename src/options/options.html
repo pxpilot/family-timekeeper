@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Family Timekeeper — settings</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+
+<section id="enroll" class="pane" hidden>
+  <h1>Set your parent passphrase</h1>
+  <p class="sub">This locks these settings and generates the unlock codes. Pick something your son won't guess, and don't reuse a password he's seen you type.</p>
+  <input id="p1" type="password" placeholder="Passphrase" autocomplete="new-password">
+  <input id="p2" type="password" placeholder="Repeat it" autocomplete="new-password">
+  <button class="primary" id="enrollBtn">Save and continue</button>
+  <p class="err" id="enrollErr" hidden></p>
+</section>
+
+<section id="lock" class="pane" hidden>
+  <h1>Settings are locked</h1>
+  <p class="sub">Enter the parent passphrase.</p>
+  <input id="pw" type="password" placeholder="Passphrase" autocomplete="current-password">
+  <button class="primary" id="unlockBtn">Unlock</button>
+  <p class="err" id="lockErr" hidden></p>
+</section>
+
+<main id="app" hidden>
+  <header>
+    <h1>Family Timekeeper</h1>
+    <p class="sub" id="todayLine"></p>
+  </header>
+
+  <section class="block">
+    <h2>Today</h2>
+    <div class="status" id="status"></div>
+    <div class="quick">
+      <select id="qSite"></select>
+      <select id="qMins"></select>
+      <button id="qGrant">Grant now</button>
+      <button id="qReset" class="ghost">Reset today's counters</button>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>Daily budgets</h2>
+    <table class="grid" id="budgets"></table>
+  </section>
+
+  <section class="block">
+    <h2>Allowed hours</h2>
+    <p class="sub">Ranges in 24-hour time, comma separated. Empty means blocked all day. These apply to every site unless a site overrides them below.</p>
+    <table class="grid" id="schedule"></table>
+  </section>
+
+  <section class="block">
+    <h2>Sessions</h2>
+    <div class="row"><label for="sMax">Longest stretch</label><input id="sMax" type="number" min="1" max="240"><span class="unit">minutes</span></div>
+    <div class="row"><label for="sBreak">Then a break of</label><input id="sBreak" type="number" min="1" max="240"><span class="unit">minutes</span></div>
+    <div class="row"><label for="gMax">Max single grant</label><input id="gMax" type="number" min="5" max="240"><span class="unit">minutes</span></div>
+    <div class="row check"><input id="mEmb" type="checkbox"><label for="mEmb">Count embedded videos on other sites against the budget</label></div>
+  </section>
+
+  <footer>
+    <button class="primary" id="save">Save settings</button>
+    <span class="saved" id="saved" hidden>Saved</span>
+  </footer>
+</main>
+
+<script type="module" src="options.js"></script>
+</body>
+</html>

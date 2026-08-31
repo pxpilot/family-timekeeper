@@ -1,0 +1,10 @@
+# The extension signing key. Losing it means a new extension ID and a
+# reinstall on his laptop, so back it up somewhere private — but it must
+# never land in a public repo, or anyone could sign a build with this ID.
+install/timekeeper-key.pem
+install/pub.der
+
+node_modules/
+package-lock.json
+dist/
+.DS_Store

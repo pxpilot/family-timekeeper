@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Timekeeper — Parent Code</title>
+<style>
+  :root { color-scheme: light dark; --bg:#f6f7f9; --card:#fff; --ink:#101828; --muted:#667085; --line:#e4e7ec; --accent:#175cd3; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#0e1117; --card:#161b23; --ink:#e6e9ef; --muted:#8d97a8; --line:#262c37; --accent:#6ea8fe; } }
+  * { box-sizing: border-box; }
+  body { margin:0; min-height:100vh; display:grid; place-items:center; padding:28px 18px; background:var(--bg); color:var(--ink);
+         font:15px/1.55 -apple-system,"Segoe UI",system-ui,sans-serif; }
+  .card { width:100%; max-width:400px; background:var(--card); border:1px solid var(--line); border-radius:18px; padding:28px 26px 24px; }
+  h1 { font-size:20px; letter-spacing:-.02em; margin:0 0 4px; }
+  p.sub { color:var(--muted); font-size:13px; margin:0 0 20px; }
+  label { display:block; font-size:12.5px; color:var(--muted); margin:12px 0 5px; }
+  input, select { width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:9px; background:var(--bg); color:var(--ink); font:inherit; }
+  #challenge { text-transform:uppercase; letter-spacing:.2em; font-family:ui-monospace,Menlo,Consolas,monospace; }
+  button { width:100%; margin-top:18px; padding:11px; border:0; border-radius:9px; background:var(--accent); color:#fff; font:600 15px/1 inherit; cursor:pointer; }
+  button:disabled { opacity:.6; cursor:default; }
+  .out { margin-top:20px; text-align:center; }
+  .code { font:700 40px/1.1 ui-monospace,Menlo,Consolas,monospace; letter-spacing:.14em; }
+  .hint { color:var(--muted); font-size:12.5px; margin-top:6px; }
+  .warn { margin-top:20px; padding-top:14px; border-top:1px solid var(--line); color:var(--muted); font-size:12px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>Give extra time</h1>
+  <p class="sub">Works offline. Nothing here is sent anywhere — the code is computed on this device.</p>
+
+  <label for="challenge">Code he read you</label>
+  <input id="challenge" maxlength="6" autocomplete="off" placeholder="ABC123">
+
+  <label for="site">Site</label>
+  <select id="site">
+    <option value="youtube">YouTube</option>
+    <option value="tiktok">TikTok</option>
+    <option value="instagram">Instagram</option>
+  </select>
+
+  <label for="minutes">Minutes to grant</label>
+  <select id="minutes">
+    <option>5</option><option>10</option><option selected>15</option>
+    <option>20</option><option>30</option><option>45</option><option>60</option>
+  </select>
+
+  <label for="pass">Your passphrase</label>
+  <input id="pass" type="password" autocomplete="off">
+
+  <button id="go">Generate</button>
+
+  <div class="out" id="out" hidden>
+    <div class="code" id="code"></div>
+    <div class="hint">He must pick the same number of minutes on his screen.</div>
+  </div>
+
+  <p class="warn">Keep this file somewhere he can't read it, and never open it on his laptop — anyone with the passphrase can mint codes.</p>
+</div>
+
+<script>
+// Must stay byte-identical in behaviour to src/lib/crypto.js
+const ITER = 200000;
+const CODE_SALT = 'family-timekeeper/v1/grant';
+const enc = new TextEncoder();
+
+async function grantCode(passphrase, challenge, site, minutes) {
+  const base = await crypto.subtle.importKey('raw', enc.encode(passphrase), 'PBKDF2', false, ['deriveBits']);
+  const bits = await crypto.subtle.deriveBits(
+    { name: 'PBKDF2', salt: enc.encode(CODE_SALT), iterations: ITER, hash: 'SHA-256' }, base, 256);
+  const key = await crypto.subtle.importKey('raw', bits, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+  const msg = `${String(challenge).trim().toUpperCase()}|${site}|${minutes}`;
+  const sig = new Uint8Array(await crypto.subtle.sign('HMAC', key, enc.encode(msg)));
+  const n = ((sig[0] & 0x7f) << 24) | (sig[1] << 16) | (sig[2] << 8) | sig[3];
+  return String(n % 1000000).padStart(6, '0');
+}
+
+const $ = (id) => document.getElementById(id);
+$('go').addEventListener('click', async () => {
+  const btn = $('go');
+  btn.disabled = true; btn.textContent = 'Working…';
+  try {
+    const code = await grantCode($('pass').value, $('challenge').value, $('site').value, $('minutes').value);
+    $('code').textContent = code;
+    $('out').hidden = false;
+  } catch (e) {
+    alert('Could not generate a code: ' + e.message);
+  }
+  btn.disabled = false; btn.textContent = 'Generate';
+});
+</script>
+</body>
+</html>

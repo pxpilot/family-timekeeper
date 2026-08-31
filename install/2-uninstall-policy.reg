@@ -1,0 +1,23 @@
+Windows Registry Editor Version 5.00
+
+; ===========================================================================
+;  Family Timekeeper — remove every policy the installer added.
+;
+;  Right-click -> Merge, approve the admin prompt, then restart Chrome.
+;  After this, the extension becomes removable from chrome://extensions
+;  again, and incognito / guest / DevTools go back to normal.
+;
+;  The leading minus sign deletes the key.
+; ===========================================================================
+
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome\ExtensionSettings]
+
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome\URLBlocklist]
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome]
+"IncognitoModeAvailability"=-
+"BrowserGuestModeEnabled"=-
+"BrowserAddPersonEnabled"=-
+"BlockExternalExtensions"=-
+"SyncDisabled"=-
+"DeveloperToolsAvailability"=-
