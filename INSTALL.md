@@ -10,40 +10,35 @@ Extension ID: `mfapfgenhahkmhgnflaggaehogaepgad`
 | Path | What it is |
 |---|---|
 | `manifest.json`, `src/` | The extension itself |
-| `dist/timekeeper.crx` | Signed, ready to host |
-| `dist/update.xml` | Tells Chrome where the .crx is and what version it is |
+| `docs/timekeeper.crx` | Signed package, served by GitHub Pages |
+| `docs/update.xml` | Tells Chrome where the .crx is and what version it is |
 | `install/1-install-policy.reg` | Force-installs it and closes the obvious workarounds |
 | `install/2-uninstall-policy.reg` | Undoes all of that |
-| `install/timekeeper-key.pem` | **Private key. Keep it off his laptop.** |
-| `install/pack_crx.py` | Repacks + re-signs after you change the code |
+| `install/timekeeper-key.pem` | **Private key. Not in the repo. Keep it off his laptop.** |
+| `install/configure.py` | Repoints everything at a different Pages URL |
+| `release.sh` | Tests, repacks and re-signs a new version |
 | `tools/parent-code.html` | Your offline code generator — keep it on *your* devices |
-| `test/` | Unit + smoke tests |
+| `test/` | Unit, smoke and force-install tests |
 
 ---
 
-## Step 1 — Put the .crx somewhere Chrome can fetch it
+## Step 1 — Hosting (already done)
 
-Force-install needs an HTTPS `update_url`. Two ways:
+The package is served from **https://pxpilot.github.io/family-timekeeper/**, and
+`install/1-install-policy.reg` already points at it. Nothing to edit.
 
-**A. GitHub Pages (free, 10 minutes).**
-Create a repo, drop `timekeeper.crx` and `update.xml` in it, enable Pages. Your update URL becomes
-`https://<you>.github.io/<repo>/update.xml`. Edit `dist/update.xml` so `codebase` points at the matching
-`.../timekeeper.crx`. A private repo won't work — Chrome fetches these anonymously. That's fine: the
-.crx contains no secrets, and it's useless without your passphrase.
+If you ever move it — a different repo, or the Chrome Web Store — run
+`python3 install/configure.py --owner <user> --repo <repo>` and it rewrites the `.reg`, `release.sh` and
+`update.xml` together so they can't drift apart.
 
-**B. Chrome Web Store, unlisted.** One-time $5 developer fee, upload `dist/timekeeper.zip`, publish as
-*Unlisted*. Then in the .reg use Google's own update URL:
-`https://clients2.google.com/service/update2/crx`, and use the ID the store assigns. Slightly more
-setup, but Chrome trusts it unconditionally and updates are one upload.
+Note the repo has to stay **public**: Chrome fetches the update manifest anonymously. That's fine — the
+`.crx` holds no secrets and is inert without your passphrase, and the signing key is not in the repo.
 
-Either way, confirm the URL loads in a browser before moving on.
+## Step 2 — Merge the policy file
 
-## Step 2 — Edit and merge the policy file
+On his laptop, as an administrator: right-click `install/1-install-policy.reg` → **Merge** → approve.
 
-Open `install/1-install-policy.reg` in Notepad, replace `https://REPLACE-ME.example/timekeeper/update.xml`
-with your real URL, save. Then on his laptop, as an administrator: right-click → **Merge** → approve.
-
-Fully quit Chrome (check the tray) and reopen it.
+Fully quit Chrome (check the tray, not just the window) and reopen it.
 
 ## Step 3 — Verify
 
@@ -75,14 +70,7 @@ in 15 minutes. **Never open this file on his laptop** — the passphrase is the 
 
 ## Changing the code later
 
-First time only — point everything at your Pages URL:
-
-```bash
-python3 install/configure.py --owner <your-github-username> --repo family-timekeeper
-```
-
-That rewrites the update URL in `install/1-install-policy.reg` and `release.sh`, then repacks `docs/` so
-`update.xml` advertises the same address. After that, shipping a new version is:
+Shipping a new version:
 
 ```bash
 # bump "version" in manifest.json first — Chrome only updates when it goes up
@@ -130,7 +118,7 @@ Three things close most of that gap, roughly in order of effort:
    catches every browser and every device on the network at once. It can't do per-site minute budgets,
    so it complements this rather than replacing it. He can beat it with mobile data.
 
-None of this is airtight, and a determined 14-year-old with time and a search engine will eventually find
+None of this is airtight, and a determined teenager with time and a search engine will eventually find
 an edge. The realistic goal is to make the easy paths closed and the remaining paths effortful enough
 that they're a choice he'd have to make deliberately — which is a conversation, not a config file.
 

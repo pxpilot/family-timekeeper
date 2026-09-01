@@ -10,7 +10,7 @@ set -euo pipefail
 
 VERSION="${1:-}"
 KEY="install/timekeeper-key.pem"
-BASE_URL="__PAGES_URL__"
+BASE_URL="https://pxpilot.github.io/family-timekeeper"
 
 if [[ -z "$VERSION" ]]; then
   echo "usage: ./release.sh <version>   e.g. ./release.sh 1.0.1" >&2

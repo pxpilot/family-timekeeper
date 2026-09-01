@@ -6,14 +6,15 @@ Windows Registry Editor Version 5.00
 ;  Extension ID: mfapfgenhahkmhgnflaggaehogaepgad
 ;
 ;  BEFORE YOU RUN THIS:
-;    1. Replace  https://REPLACE-ME.example/timekeeper/update.xml
-;       with the real URL where you host update.xml (see INSTALL.md).
+;    1. Nothing to edit. The update URL below already points at
+;       https://pxpilot.github.io/family-timekeeper/update.xml
 ;    2. Right-click the file -> Merge, and approve the admin prompt.
 ;    3. Fully quit and reopen Chrome, then check chrome://policy.
 ;
 ;  Everything here lives under HKEY_LOCAL_MACHINE, so it applies to every
-;  Windows account on the machine — including yours. If you want it to apply
-;  only to him, see the "per-user" note at the bottom of INSTALL.md.
+;  Windows account on the machine — including yours. That is deliberate: the
+;  per-user hive (HKEY_CURRENT_USER) can be edited by that user, which would
+;  hand him the off switch. Use a separate Windows account for him instead.
 ; ===========================================================================
 
 
@@ -28,7 +29,7 @@ Windows Registry Editor Version 5.00
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome\ExtensionSettings\mfapfgenhahkmhgnflaggaehogaepgad]
 "installation_mode"="force_installed"
-"update_url"="https://REPLACE-ME.example/timekeeper/update.xml"
+"update_url"="https://pxpilot.github.io/family-timekeeper/update.xml"
 "toolbar_pin"="force_pinned"
 
 ; Example: allow an extension he already uses (replace the ID).
